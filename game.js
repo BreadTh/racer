@@ -97,7 +97,7 @@ window.addEventListener('keyup', e => { keys[e.code] = false; e.preventDefault()
 // ---- ENEMIES ----
 const enemies = [];
 const enemyTiles = new Set(); // "ti,tj" keys for O(1) occupied check
-const ENEMY_SPAWN_INTERVAL = 0.02;
+const ENEMY_SPAWN_INTERVAL = 0.2;
 let enemySpawnTimer = 0; // 0 = spawn immediately on first frame
 
 // ---- LASERS ----
@@ -933,16 +933,6 @@ function update(dt) {
   }
 
 
-  // Cull enemies far from player
-  const cullDist2 = ((DRAW_DIST + 80) * TILE_SIZE) ** 2;
-  for (let i = enemies.length - 1; i >= 0; i--) {
-    const dx = enemies[i].x - player.x;
-    const dy = enemies[i].y - player.y;
-    if (dx * dx + dy * dy > cullDist2) {
-      enemyTiles.delete(enemies[i].ti + ',' + enemies[i].tj);
-      enemies.splice(i, 1);
-    }
-  }
 
   // Enemy spawning
   enemySpawnTimer -= dt;
@@ -1141,7 +1131,7 @@ function spawnEnemy() {
     if (h > 0) {
       const key = ti + ',' + tj;
       if (enemyTiles.has(key)) continue;
-      if (enemies.length >= 700) {
+      if (enemies.length >= 3000) {
         const old = enemies.shift();
         enemyTiles.delete(old.ti + ',' + old.tj);
       }
